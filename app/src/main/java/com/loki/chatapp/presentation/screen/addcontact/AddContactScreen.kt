@@ -108,31 +108,33 @@ fun AddContactScreen(
                     val isContact = viewModel.contactIds.contains(user.userId)
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        verticalAlignment = Alignment.CenterVertically
                     ){
                         Row(
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.weight(1f)
                         ) {
                             ProfileCircle(user.name, profileImageUrl = user.profileImageUrl, isOnline = false)
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(user.name, color = Color.White)
-                            Spacer(modifier = Modifier.width(200.dp))
-                            when{
-                                isContact -> {
-                                    Text("Added", color = Color.White)
-                                }
-                                isRequested -> {
-                                    Text("Requested", color = Color.White)
-                                }
+                            Spacer(modifier = Modifier.width(12.dp))
 
-                                else -> {
-                                    IconButton(onClick = {
-                                        val currentUserId =
-                                            FirebaseAuth.getInstance().currentUser?.uid ?: return@IconButton
-                                        viewModel.sendRequest(currentUserId,user.userId)
-                                    }) {
-                                        Icon(Icons.Default.PersonAdd, contentDescription = "add", tint = Color.White)
-                                    }
+                        }
+                        when{
+                            isContact -> {
+                                Text("Added", color = Color.White)
+                            }
+                            isRequested -> {
+                                Text("Requested", color = Color.White)
+                            }
+
+                            else -> {
+                                IconButton(onClick = {
+                                    val currentUserId =
+                                        FirebaseAuth.getInstance().currentUser?.uid ?: return@IconButton
+                                    viewModel.sendRequest(currentUserId,user.userId)
+                                }) {
+                                    Icon(Icons.Default.PersonAdd, contentDescription = "add", tint = Color.White)
                                 }
                             }
                         }

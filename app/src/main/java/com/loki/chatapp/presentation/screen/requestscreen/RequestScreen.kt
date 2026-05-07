@@ -69,12 +69,15 @@ fun RequestScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
                         ProfileCircle(user.name, user.profileImageUrl)
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(user.name, color = Color.White)
                     }
-                    Spacer(modifier = Modifier.width(200.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
                     Button(
                         onClick = {
