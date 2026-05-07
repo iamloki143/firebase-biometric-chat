@@ -2,10 +2,8 @@ package com.loki.chatapp
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentActivity
 import com.loki.chatapp.navigation.AppNavigation
 import com.loki.chatapp.ui.theme.BackgroundWrapper

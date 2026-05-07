@@ -6,8 +6,16 @@ import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.loki.chatapp.presentation.screen.authscreen.AuthScreen
 import com.loki.chatapp.presentation.screen.authscreen.WelcomeScreen
 import com.loki.chatapp.presentation.screen.chatscreen.ChatScreen
+import com.loki.chatapp.presentation.screen.profilesetup.UsernameSetupScreen
 import com.loki.chatapp.presentation.viewmodel.SettingsViewModel
 
 @Composable
@@ -36,6 +45,9 @@ fun AppNavigation() {
 
     var shouldAuthenticate by remember { mutableStateOf(false) }
     var navigateToMain by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.loadSettings()
@@ -133,10 +145,7 @@ fun AppNavigation() {
             MainScreen(
                 rootNavController = navController,
                 onLogout = {
-                    FirebaseAuth.getInstance().signOut()
-                    navController.navigate(Screen.Auth.route) {
-                        popUpTo(Screen.Main.route) { inclusive = true }
-                    }
+                    showLogoutDialog = true
                 }
             )
         }
@@ -149,10 +158,18 @@ fun AppNavigation() {
 
         composable(Screen.Auth.route) {
             AuthScreen(
-                onAuthSuccess = {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(0)
+                onAuthSuccess = {isSignUp ->
+                    if (isSignUp){
+                        navController.navigate(Screen.UsernameSetup.route){
+                            popUpTo(0)
+                        }
                     }
+                    else{
+                        navController.navigate(Screen.Main.route){
+                            popUpTo(0)
+                        }
+                    }
+
                 }
             )
         }
@@ -167,6 +184,61 @@ fun AppNavigation() {
                 onBack = { navController.popBackStack() }
             )
         }
+        composable(Screen.UsernameSetup.route){
+            UsernameSetupScreen {
+                navController.navigate(Screen.Main.route){
+                    popUpTo(Screen.UsernameSetup.route){
+                        inclusive=true
+                    }
+                }
+            }
+        }
+    }
+    if (showLogoutDialog) {
+
+        AlertDialog(
+            onDismissRequest = {
+                showLogoutDialog = false
+            },
+
+            title = {
+                Text("Logout")
+            },
+
+            text = {
+                Text("Are you sure you want to logout?")
+            },
+
+            confirmButton = {
+
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+
+                        FirebaseAuth.getInstance().signOut()
+
+                        navController.navigate(Screen.Auth.route) {
+                            popUpTo(Screen.Main.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                ) {
+                    Text("Yes")
+                }
+            },
+
+            dismissButton = {
+
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 
     LaunchedEffect(navigateToMain) {

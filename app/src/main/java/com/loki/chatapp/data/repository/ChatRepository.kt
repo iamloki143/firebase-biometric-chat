@@ -1,7 +1,7 @@
 package com.loki.chatapp.data.repository
 
-import com.loki.chatapp.domain.model.Message
 import com.google.firebase.firestore.FirebaseFirestore
+import com.loki.chatapp.domain.model.Message
 
 class ChatRepository {
     private val db = FirebaseFirestore.getInstance()

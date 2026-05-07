@@ -35,7 +35,7 @@ import com.loki.chatapp.presentation.state.AuthState
 import com.loki.chatapp.presentation.viewmodel.AuthViewModel
 
 @Composable
-fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: () -> Unit) {
+fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Boolean) -> Unit) {
     var selectedTab by remember { mutableStateOf(0) }
     var confirmPassword by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -107,7 +107,7 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: () ->
                         OutlinedTextField(
                             value = confirmPassword,
                             onValueChange = { confirmPassword = it },
-                            label = { Text("Enter EmailID", color = Color.LightGray) },
+                            label = { Text("Enter Confirm Password", color = Color.LightGray) },
                             modifier = Modifier.fillMaxWidth(),
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -129,7 +129,6 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: () ->
                         }else{
                             if (password!=confirmPassword) return@Button
                             viewModel.signup(email,password)
-                            selectedTab=0
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -146,7 +145,7 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: () ->
                         AuthState.Loading -> CircularProgressIndicator()
                         AuthState.Success -> {
                             LaunchedEffect(Unit) {
-                                onAuthSuccess()
+                                onAuthSuccess(selectedTab == 1)
                             }
                         }
                         is AuthState.Error -> Text(state.message,color = Color.Red)

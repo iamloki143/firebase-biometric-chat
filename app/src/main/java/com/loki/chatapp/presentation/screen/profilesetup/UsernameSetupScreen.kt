@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 @Composable
 fun UsernameSetupScreen (
@@ -36,6 +37,7 @@ fun UsernameSetupScreen (
 ){
     var name by remember{mutableStateOf("")}
     var loading by remember{ mutableStateOf(false) }
+    var error by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -66,7 +68,7 @@ fun UsernameSetupScreen (
 
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = { name = it.filter { char -> char.isLetterOrDigit() ||char == '_'} },
                     placeholder = {
                         Text("Enter your Username", color = Color.LightGray)
                     },
@@ -79,31 +81,69 @@ fun UsernameSetupScreen (
                         cursorColor = Color.White
                     )
                 )
+                if (error.isNotEmpty()){
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = error,
+                        color = Color.Red
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = {
-                        if (name.isBlank()) return@Button
-                        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@Button
+                        val trimmedName =name.trim().lowercase()
+                        if (!trimmedName.matches(Regex("^[a-zA-Z0-9_]+$"))) {
+                            error = "Only letters, numbers, and underscore allowed"
+                            return@Button
+                        }
+                        if (trimmedName.isBlank()){
+                            error = "username is required"
+                            return@Button
+                        }
+                        if (trimmedName.length < 5){
+                            error = "Username must be at least 5 characters"
+                            return@Button
+                        }
                         loading = true
+                        error=""
 
-                        FirebaseFirestore.getInstance()
-                            .collection("users")
-                            .document(uid)
-                            .set(
-                                mapOf("name" to name),
-                                com.google.firebase.firestore.SetOptions.merge()
-                            )
-                            .addOnSuccessListener {
-                                loading = false
-                                onNext()
+                        val db = FirebaseFirestore.getInstance()
+                        db.collection("users")
+                            .whereEqualTo("name",trimmedName)
+                            .get()
+                            .addOnSuccessListener {result ->
+                                if (!result.isEmpty){
+                                    loading = false
+                                    error="Username already taken"
+                                }else{
+                                    val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnSuccessListener
+                                    val db = FirebaseFirestore.getInstance()
+                                    db.collection("users")
+                                        .document(uid)
+                                        .set(
+                                            mapOf("name" to trimmedName),
+                                            SetOptions.merge()
+                                        )
+                                        .addOnSuccessListener {
+                                            loading= false
+                                            onNext()
+                                        }
+                                        .addOnFailureListener {
+                                            loading=false
+                                            error="Something went wrong"
+                                        }
+                                }
                             }
                             .addOnFailureListener {
-                                loading = false
+                                loading=false
+                                error="Failed to check username"
                             }
 
+
                     },
+                    enabled = !loading,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     if (loading) {
