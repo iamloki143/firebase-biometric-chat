@@ -36,6 +36,9 @@ fun ChatScreen(
     val chatId = listOf(currentUserId, userId)
         .sorted()
         .joinToString("_")
+    var navigatingBack by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.startListening(chatId)
@@ -50,7 +53,15 @@ fun ChatScreen(
         TopAppBar(
             title = { Text(userName, color = Color.White) },
             navigationIcon = {
-                IconButton(onClick = { onBack() }) {
+                IconButton(onClick = {
+                    if (!navigatingBack) {
+
+                        navigatingBack = true
+
+                        onBack()
+                    }
+
+                }) {
                     Icon(Icons.Default.ArrowBack, null, tint = Color.White)
                 }
             },

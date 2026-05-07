@@ -118,7 +118,6 @@ fun AddContactScreen(
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(user.name, color = Color.White)
                             Spacer(modifier = Modifier.width(12.dp))
-
                         }
                         when{
                             isContact -> {
