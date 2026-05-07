@@ -9,11 +9,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -29,6 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.loki.chatapp.presentation.state.AuthState
@@ -41,6 +48,9 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val state = viewModel.state
+    var passwordVisible by remember {
+        mutableStateOf(false)
+    }
     Column {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -92,6 +102,36 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
                         onValueChange = { password = it },
                         label = { Text("Enter Password", color = Color.LightGray) },
                         modifier = Modifier.fillMaxWidth(),
+                        visualTransformation =
+
+                            if (passwordVisible)
+                                VisualTransformation.None
+                            else
+                                PasswordVisualTransformation(),
+
+                        trailingIcon = {
+
+                            IconButton(
+                                onClick = {
+                                    passwordVisible = !passwordVisible
+                                }
+                            ) {
+
+                                Icon(
+                                    imageVector =
+
+                                        if (passwordVisible)
+                                            Icons.Default.Visibility
+                                        else
+                                            Icons.Default.VisibilityOff,
+
+                                    contentDescription = null,
+
+                                    tint = Color.White
+                                )
+                            }
+                        },
+
                         textStyle = LocalTextStyle.current.copy(color = Color.White),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Color.White,
@@ -109,6 +149,35 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
                             onValueChange = { confirmPassword = it },
                             label = { Text("Enter Confirm Password", color = Color.LightGray) },
                             modifier = Modifier.fillMaxWidth(),
+                            visualTransformation =
+
+                                if (passwordVisible)
+                                    VisualTransformation.None
+                                else
+                                    PasswordVisualTransformation(),
+
+                            trailingIcon = {
+
+                                IconButton(
+                                    onClick = {
+                                        passwordVisible = !passwordVisible
+                                    }
+                                ) {
+
+                                    Icon(
+                                        imageVector =
+
+                                            if (passwordVisible)
+                                                Icons.Default.Visibility
+                                            else
+                                                Icons.Default.VisibilityOff,
+
+                                        contentDescription = null,
+
+                                        tint = Color.White
+                                    )
+                                }
+                            },
                             textStyle = LocalTextStyle.current.copy(color = Color.White),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = Color.White,
