@@ -128,8 +128,12 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .padding(24.dp)
+                .padding(
+                    top = padding.calculateTopPadding(),
+                    start = 6.dp,
+                    end = 6.dp
+                )
+                .padding(6.dp).padding(bottom = 0.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top

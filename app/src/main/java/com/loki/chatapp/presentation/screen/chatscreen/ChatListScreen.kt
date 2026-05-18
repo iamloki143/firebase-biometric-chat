@@ -82,7 +82,11 @@ fun ChatListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(
+                    top = padding.calculateTopPadding(),
+                    start = 6.dp,
+                    end = 6.dp
+                )
         ) {
 
             OutlinedTextField(

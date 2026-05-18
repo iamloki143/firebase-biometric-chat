@@ -2,6 +2,7 @@ package com.loki.chatapp.ui.theme
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -16,8 +17,14 @@ fun BackgroundWrapper(content: @Composable () -> Unit) {
 
     Box(modifier = Modifier.fillMaxSize()) {
 
+        val isDarkTheme = isSystemInDarkTheme()
+        val backgroundImage = if (isDarkTheme) {
+            R.drawable.bg_pattern
+        } else {
+            R.drawable.bg_light
+        }
         Image(
-            painter = painterResource(id = R.drawable.bg_pattern),
+            painter = painterResource(id = backgroundImage),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
@@ -26,7 +33,7 @@ fun BackgroundWrapper(content: @Composable () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
+                .background(if (isDarkTheme) {Color.Black.copy(alpha = 0.5f)} else {Color.White.copy(alpha = 0.2f)})
         )
         Box(modifier = Modifier.fillMaxSize()) {
             content()
