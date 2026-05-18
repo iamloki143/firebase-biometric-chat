@@ -75,9 +75,14 @@ dependencies {
     //FireBase Connection
     implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
     implementation("com.google.firebase:firebase-analytics")
+    //firebase authentication
     implementation("com.google.firebase:firebase-auth")
+    //firebase database
     implementation("com.google.firebase:firebase-firestore")
+    //firebase storage
     implementation("com.google.firebase:firebase-storage-ktx:21.0.1")
+    //firebase Notification
+    implementation("com.google.firebase:firebase-messaging:24.0.1")
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
@@ -90,5 +95,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
     //Biometric
     implementation("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
 }

@@ -1,10 +1,14 @@
 package com.loki.chatapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.loki.chatapp.domain.usecase.LoginUseCase
 import com.loki.chatapp.domain.usecase.SignupUseCase
 import com.loki.chatapp.presentation.state.AuthState
@@ -16,28 +20,26 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val signupUseCase: SignupUseCase
-): ViewModel() {
+) : ViewModel() {
     var state by mutableStateOf<AuthState>(AuthState.Idle)
         private set
-    fun login(email:String, password: String){
+    fun login(email: String, password: String) {
         viewModelScope.launch {
-            state= AuthState.Loading
-            val result =loginUseCase(email,password)
-            state=result.fold(
-                onSuccess = { AuthState.Success},
-                onFailure = { AuthState.Error(it.message ?: "Error")}
+            state = AuthState.Loading
+            val result = loginUseCase(email, password)
+            state = result.fold(
+                onSuccess = { AuthState.Success },
+                onFailure = { AuthState.Error(it.message ?: "Error") }
             )
         }
     }
-    fun signup(email: String,password: String){
+    fun signup(email: String, password: String) {
         viewModelScope.launch {
-            state= AuthState.Loading
-            val result=signupUseCase(email,password)
-            state=result.fold(
-                onSuccess = {
-                    AuthState.Success
-                },
-                onFailure = { AuthState.Error(it.message ?: "Error")}
+            state = AuthState.Loading
+            val result = signupUseCase(email, password)
+            state = result.fold(
+                onSuccess = { AuthState.Success },
+                onFailure = { AuthState.Error(it.message ?: "Error") }
             )
         }
     }

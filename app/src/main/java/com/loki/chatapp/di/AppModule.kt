@@ -1,3 +1,8 @@
+// ============================================================
+// AppModule.kt
+// Replace: com/loki/chatapp/di/AppModule.kt
+// ============================================================
+
 package com.loki.chatapp.di
 
 import android.content.Context
@@ -7,6 +12,7 @@ import com.loki.chatapp.data.local.dao.SettingsDao
 import com.loki.chatapp.data.local.database.AppDatabase
 import com.loki.chatapp.data.repository.AuthRepositoryImp
 import com.loki.chatapp.data.repository.ChatRepository
+import com.loki.chatapp.data.repository.SettingsRepository
 import com.loki.chatapp.domain.repository.AuthRepository
 import com.loki.chatapp.domain.usecase.ListenMessagesUseCase
 import com.loki.chatapp.domain.usecase.LoginUseCase
@@ -24,9 +30,8 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
-
     @Provides
-    fun provideAuthRepository(auth: FirebaseAuth): AuthRepository{
+    fun provideAuthRepository(auth: FirebaseAuth): AuthRepository {
         return AuthRepositoryImp(auth)
     }
     @Provides
@@ -34,21 +39,20 @@ object AppModule {
 
     @Provides
     fun provideSignupUseCase(repo: AuthRepository) = SignupUseCase(repo)
+    @Provides
+    fun provideChatRepository() = ChatRepository()
 
     @Provides
-    fun provideChatRepository()= ChatRepository()
+    fun provideSendMessageUseCase(repo: ChatRepository) = SendMessageUseCase(repo)
 
     @Provides
-    fun providesSendMessageUseCase(repo: ChatRepository)= SendMessageUseCase(repo)
-
-    @Provides
-    fun provideListenMessageUseCase(repo: ChatRepository)= ListenMessagesUseCase(repo)
+    fun provideListenMessageUseCase(repo: ChatRepository) = ListenMessagesUseCase(repo)
 
     @Provides
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context
-    ): AppDatabase{
+    ): AppDatabase {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
@@ -57,9 +61,13 @@ object AppModule {
     }
 
     @Provides
-    fun provideSettingsDao(database: AppDatabase): SettingsDao{
+    fun provideSettingsDao(database: AppDatabase): SettingsDao {
         return database.settingsDao()
     }
 
-
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(dao: SettingsDao): SettingsRepository {
+        return SettingsRepository(dao)
+    }
 }

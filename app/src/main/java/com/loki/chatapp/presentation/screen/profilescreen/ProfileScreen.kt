@@ -1,5 +1,7 @@
 package com.loki.chatapp.presentation.screen.profilescreen
 
+import android.R.attr.contentDescription
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
@@ -15,6 +21,8 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,11 +45,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.loki.chatapp.R
 import com.loki.chatapp.presentation.viewmodel.SettingsViewModel
 import com.loki.chatapp.utils.ProfileCircle
 
@@ -115,9 +129,10 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(24.dp),
+                .padding(24.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
 
             ProfileCircle(name = username)
@@ -280,22 +295,128 @@ fun ProfileScreen(
             ) {
                 Text("Logout", color = Color.White)
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Spacer(modifier = Modifier.height(24.dp))
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White.copy(alpha = 0.1f)
+                ),
+                shape = RoundedCornerShape(24.dp),
             ) {
-                Text(
-                    text = "App Lock",
-                    color=Color.White
-                )
-                Switch(
-                    checked = isEnabled,
-                    onCheckedChange = {settingsViewModel.onToggleChanged(it)}
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Card(
+                                colors = CardDefaults.cardColors(containerColor = Color.White),
+                                shape = RoundedCornerShape(10.dp),
+                                modifier = Modifier.padding(10.dp).padding(top = 20.dp)
+
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.fingerprint), contentDescription = "Fingerprint",
+                                    modifier = Modifier.size(40.dp))
+                            }
+                            Column(modifier = Modifier.weight(1f).padding(16.dp)) {
+                                Text(
+                                    text = "User Device Authentication",
+                                    color=Color.White,
+                                    fontWeight = Bold,
+                                    fontSize = 18.sp
+                                )
+                                Text(
+                                    text = "Required when opening the app",
+                                    color = Color.White,
+                                    modifier = Modifier.padding(top = 6.dp)
+                                )
+                            }
+                            Switch(
+                                checked = isEnabled,
+                                onCheckedChange = {settingsViewModel.onToggleChanged(it)},
+                                modifier = Modifier.padding(16.dp).padding(top = 20.dp)
+                            )
+                        }
+                        Divider(
+                            color = Color.White.copy(alpha = 0.2f),
+                            thickness = 1.dp
+                        )
+                        Row(
+                            modifier = Modifier.padding(8.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.safeauth), contentDescription = "Safe Data",
+                                modifier = Modifier.size(20.dp))
+                            Text(
+                                text = "Your authentication data remains security managed by your device.",
+                                color = Color.White.copy(alpha = 0.6f),
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+
+                    }
+                }
             }
+            Spacer(modifier = Modifier.height(24.dp))
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White.copy(alpha = 0.1f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(10.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+
+                ){
+                    val imageprint = if (isEnabled) painterResource(R.drawable.greenlock) else painterResource(R.drawable.redlock)
+                    val cardColor=if (isEnabled) Color(0xFF91D06C) else Color(0xFFF44336)
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = cardColor.copy(alpha = 0.1f)),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.padding(10.dp).padding(top = 20.dp)
+
+                    ) {
+                        Image(
+                            painter = imageprint,
+                            contentDescription = null,
+                            modifier = Modifier.size(80.dp),
+                        )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(10.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+
+                    ) {
+                        Text(
+                            text = if (isEnabled) "Device Authentication Enabled" else "Device Authentication Disabled",
+                            fontWeight = Bold,
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                        Text(
+                            text = if (isEnabled) "Your app is protected using your device security authentication." else "Turn on device authentication to prevent unauthorized access.",
+                            color = Color.White.copy(alpha = 0.6f),
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(19.dp).padding(start = 10.dp).fillMaxWidth(),
+                        )
+                    }
+                }
+            }
+
         }
     }
 }

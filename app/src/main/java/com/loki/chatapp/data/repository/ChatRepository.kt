@@ -16,6 +16,7 @@ class ChatRepository {
             }
             val msg = hashMapOf(
                 "senderId" to userId,
+                "receiverId" to otherUserId,
                 "text" to message,
                 "timestamp" to System.currentTimeMillis()
             )
