@@ -24,18 +24,18 @@ This project follows **Clean Architecture** with an **MVVM** presentation patter
 
 ```
 ┌─────────────────────────────────────┐
-│           Presentation Layer         │
+│           Presentation Layer        │
 │  (Screens, ViewModels, State, Nav)  │
 └────────────────┬────────────────────┘
                  │
 ┌────────────────▼────────────────────┐
-│             Domain Layer             │
+│             Domain Layer            │
 │     (Use Cases, Models, Repo        │
 │          Interfaces)                │
 └────────────────┬────────────────────┘
                  │
 ┌────────────────▼────────────────────┐
-│              Data Layer              │
+│              Data Layer             │
 │  (Repository Impl, Firebase, Room)  │
 └─────────────────────────────────────┘
 ```
@@ -127,86 +127,34 @@ com.loki.chatapp/
 ├── MainActivity.kt                   # Entry point (FragmentActivity)
 └── MyApp.kt                          # Hilt Application class```
 
----
-
-##  Firebase Structure
-
 ```
-com.loki.chatapp/
+##  FireBase Structure
+```
+Firestore/
 │
-├── auth/
-│   └── DeviceAuthManager.kt          # Biometric & device credential auth
+├── users/{uid}
+│   ├── userId: String
+│   ├── name: String
+│   ├── email: String
+│   └── profileImageUrl: String
 │
-├── data/
-│   ├── local/
-│   │   ├── dao/
-│   │   │   └── SettingsDao.kt        # Room DAO for settings
-│   │   ├── database/
-│   │   │   └── AppDatabase.kt        # Room database definition
-│   │   └── entity/
-│   │       └── SettingsEntity.kt     # Settings table entity
-│   └── repository/
-│       ├── AuthRepositoryImp.kt      # Firebase Auth implementation
-│       ├── ChatRepository.kt         # Firestore chat & messages
-│       └── SettingsRepository.kt     # Local settings persistence
+├── chats/{chatId}
+│   ├── participants: [uid1, uid2]
+│   └── messages/{messageId}
+│       ├── senderId: String
+│       ├── receiverId: String
+│       ├── text: String
+│       └── timestamp: Long
 │
-├── di/
-│   └── AppModule.kt                  # Hilt dependency injection module
+├── contacts/{uid}
+│   └── userList/{contactUid}
+│       └── addedAt: Long
 │
-├── domain/
-│   ├── model/
-│   │   ├── Message.kt                # Message data model
-│   │   └── User.kt                   # User data model
-│   ├── repository/
-│   │   └── AuthRepository.kt         # Auth repository interface
-│   └── usecase/
-│       ├── ListenMessagesUseCase.kt  # Listen to real-time messages
-│       ├── LoginUseCase.kt           # Login use case
-│       ├── SendMessageUseCase.kt     # Send message use case
-│       └── SignupUseCase.kt          # Signup use case
-│
-├── navigation/
-│   ├── AppNavigation.kt              # Root NavHost & lock gate
-│   ├── MainScreen.kt                 # Bottom nav scaffold
-│   └── Screen.kt                     # Sealed route definitions
-│
-├── presentation/
-│   ├── screen/
-│   │   ├── addcontact/
-│   │   │   └── AddContactScreen.kt  # Search & add contacts
-│   │   ├── authscreen/
-│   │   │   ├── AuthScreen.kt        # Login / Sign Up tabs
-│   │   │   └── WelcomeScreen.kt     # App entry welcome
-│   │   ├── chatscreen/
-│   │   │   ├── ChatListScreen.kt    # List of contacts/chats
-│   │   │   └── ChatScreen.kt        # Real-time chat view
-│   │   ├── lock/
-│   │   │   └── LockScreen.kt        # Biometric lock UI
-│   │   ├── profilescreen/
-│   │   │   └── ProfileScreen.kt     # User profile & settings
-│   │   ├── profilesetup/
-│   │   │   └── UsernameSetupScreen.kt # Post-signup username
-│   │   └── requestscreen/
-│   │       └── RequestScreen.kt     # Incoming contact requests
-│   ├── state/
-│   │   └── AuthState.kt             # Auth UI state sealed class
-│   └── viewmodel/
-│       ├── AppLockViewModel.kt      # Lock state & auth toggle
-│       ├── AuthViewModel.kt         # Login / signup state
-│       ├── ChatViewModel.kt         # Messages, contacts, requests
-│       └── SettingsViewModel.kt     # App settings toggle
-│
-├── ui/
-│   └── theme/
-│       └── BackgroundWrapper.kt     # Dark/light background wrapper
-│
-├── utils/
-│   └── ProfileCircle.kt             # Reusable avatar composable
-│
-├── MainActivity.kt                   # Entry point (FragmentActivity)
-└── MyApp.kt                          # Hilt Application class```
-
----
+└── requests/{requestId}
+    ├── fromUserId: String
+    ├── toUserId: String
+    ├── status: "pending" | "accepted"
+    └── timestamp: Long
 
 ##  Tech Stack
 
@@ -223,7 +171,7 @@ com.loki.chatapp/
 | Kotlin Coroutines | Async operations |
 | Kotlin Flow | Reactive state |
 
----
+```
 
 ##  Getting Started
 
