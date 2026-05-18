@@ -212,7 +212,3 @@ Firestore/
 - Java: 17
 
 ---
-
----
-
-<p align="center">Made with ❤️ using Jetpack Compose & Firebase</p>
