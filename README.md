@@ -155,7 +155,7 @@ Firestore/
     ├── toUserId: String
     ├── status: "pending" | "accepted"
     └── timestamp: Long
-
+```
 ##  Tech Stack
 
 | Technology | Usage |
@@ -171,7 +171,6 @@ Firestore/
 | Kotlin Coroutines | Async operations |
 | Kotlin Flow | Reactive state |
 
-```
 
 ##  Getting Started
 
