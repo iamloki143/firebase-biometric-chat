@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -40,6 +41,8 @@ fun LockScreen(
             if (success) onUnlocked()
         }
     }
+    val biometricIcon  = remember { DeviceAuthManager.biometricIcon(context) }
+    val biometricLabel = remember { DeviceAuthManager.biometricLabel(context) }
     LaunchedEffect(Unit) {
         delay(400)
         triggerAuth()
@@ -204,12 +207,12 @@ fun LockScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Image(
-                                painter = painterResource(R.drawable.whitefprint),
+                                painter = painterResource(biometricIcon),
                                 contentDescription = null,
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(30.dp)
                             )
                             Text(
-                                text = "Unlock with ${DeviceAuthManager.biometricLabel(context)}",
+                                text = "Unlock with $biometricLabel",
                                 color = Color.White,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.SemiBold

@@ -1,20 +1,50 @@
 package com.loki.chatapp.auth
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.loki.chatapp.R
 
+
+enum class BiometricType{
+    FACE, FINGERPRINT, DEVICE_CREDENTIAL,NONE
+}
 object DeviceAuthManager {
-    fun biometricLabel(context: Context): String {
+
+    fun getBiometricType(context: Context): BiometricType {
         val bm = BiometricManager.from(context)
+        val pm = context.packageManager
+        val strongOK = bm.canAuthenticate(BIOMETRIC_STRONG) ==BiometricManager.BIOMETRIC_SUCCESS
+        val hasFace=Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && pm.hasSystemFeature(
+            PackageManager.FEATURE_FACE)
+        val hasFingerprint =
+            pm.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
         return when {
-            bm.canAuthenticate(BIOMETRIC_STRONG) ==
-                    BiometricManager.BIOMETRIC_SUCCESS -> "Fingerprint"
-            else -> "Device PIN"
+            hasFace && strongOK -> BiometricType.FACE
+            strongOK && hasFingerprint -> BiometricType.FINGERPRINT
+            strongOK -> BiometricType.DEVICE_CREDENTIAL
+            else -> BiometricType.NONE
+        }
+    }
+    fun biometricLabel(context: Context): String {
+        return when (getBiometricType(context)) {
+            BiometricType.FACE              -> "Face Unlock"
+            BiometricType.FINGERPRINT       -> "Fingerprint"
+            BiometricType.DEVICE_CREDENTIAL -> "Device PIN"
+            BiometricType.NONE              -> "Device Lock"
+        }
+    }
+    fun biometricIcon(context: Context): Int {
+        return when (getBiometricType(context)) {
+            BiometricType.FACE              -> R.drawable.whiteface
+            BiometricType.FINGERPRINT       -> R.drawable.whitefprint
+            else                            -> R.drawable.whitelock
         }
     }
     fun isAvailable(context: Context): Boolean {
