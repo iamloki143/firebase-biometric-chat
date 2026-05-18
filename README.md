@@ -1,162 +1,271 @@
-# Firebase Biometric Chat App
+# ChatApp
 
-A secure real-time Android chat application built using **Firebase**, **Jetpack Compose**, and **Biometric Authentication**.  
-This project focuses on modern Android development practices with authentication, real-time messaging, local storage, dependency injection, and biometric security.
+A real-time Android chat application built with **Jetpack Compose**, **Firebase**, and **Clean Architecture**. Features biometric authentication, contact requests, and a modern glassmorphism UI.
 
 ---
 
 ##  Features
 
--  Biometric Authentication (Fingerprint / Face Unlock)
--  Firebase Authentication
--  Real-time Chat using Firestore
--  MVVM Architecture
--  Hilt Dependency Injection
--  Room Database for local storage
--  Live updates with Snapshot Listener
--  Modern UI with Jetpack Compose
--  Secure Login Flow
--  Clean and Responsive UI
+-  **Email / Password Authentication** via Firebase Auth
+-  **Biometric Lock** — Fingerprint, Face Unlock, or Device PIN
+-  **Real-time Messaging** powered by Firestore
+-  **Username Setup** with uniqueness validation
+-  **Contact Request System** — Send, receive & accept requests
+-  **Dark / Light Theme** with dynamic background
+-  **Clean Architecture** — Domain, Data, Presentation layers
+-  **Dependency Injection** with Hilt
+-  **Local Settings** with Room Database
+
+---
+
+##  Architecture
+
+This project follows **Clean Architecture** with an **MVVM** presentation pattern.
+
+```
+┌─────────────────────────────────────┐
+│           Presentation Layer         │
+│  (Screens, ViewModels, State, Nav)  │
+└────────────────┬────────────────────┘
+                 │
+┌────────────────▼────────────────────┐
+│             Domain Layer             │
+│     (Use Cases, Models, Repo        │
+│          Interfaces)                │
+└────────────────┬────────────────────┘
+                 │
+┌────────────────▼────────────────────┐
+│              Data Layer              │
+│  (Repository Impl, Firebase, Room)  │
+└─────────────────────────────────────┘
+```
+
+### Layer Responsibilities
+
+| Layer | Responsibility |
+|-------|---------------|
+| **Presentation** | Compose UI, ViewModels, Navigation |
+| **Domain** | Use Cases, Model classes, Repository interfaces |
+| **Data** | Firebase/Room implementations, DAOs, Entities |
+
+---
+
+##  File Structure
+
+```
+com.loki.chatapp/
+│
+├── auth/
+│   └── DeviceAuthManager.kt          # Biometric & device credential auth
+│
+├── data/
+│   ├── local/
+│   │   ├── dao/
+│   │   │   └── SettingsDao.kt        # Room DAO for settings
+│   │   ├── database/
+│   │   │   └── AppDatabase.kt        # Room database definition
+│   │   └── entity/
+│   │       └── SettingsEntity.kt     # Settings table entity
+│   └── repository/
+│       ├── AuthRepositoryImp.kt      # Firebase Auth implementation
+│       ├── ChatRepository.kt         # Firestore chat & messages
+│       └── SettingsRepository.kt     # Local settings persistence
+│
+├── di/
+│   └── AppModule.kt                  # Hilt dependency injection module
+│
+├── domain/
+│   ├── model/
+│   │   ├── Message.kt                # Message data model
+│   │   └── User.kt                   # User data model
+│   ├── repository/
+│   │   └── AuthRepository.kt         # Auth repository interface
+│   └── usecase/
+│       ├── ListenMessagesUseCase.kt  # Listen to real-time messages
+│       ├── LoginUseCase.kt           # Login use case
+│       ├── SendMessageUseCase.kt     # Send message use case
+│       └── SignupUseCase.kt          # Signup use case
+│
+├── navigation/
+│   ├── AppNavigation.kt              # Root NavHost & lock gate
+│   ├── MainScreen.kt                 # Bottom nav scaffold
+│   └── Screen.kt                     # Sealed route definitions
+│
+├── presentation/
+│   ├── screen/
+│   │   ├── addcontact/
+│   │   │   └── AddContactScreen.kt  # Search & add contacts
+│   │   ├── authscreen/
+│   │   │   ├── AuthScreen.kt        # Login / Sign Up tabs
+│   │   │   └── WelcomeScreen.kt     # App entry welcome
+│   │   ├── chatscreen/
+│   │   │   ├── ChatListScreen.kt    # List of contacts/chats
+│   │   │   └── ChatScreen.kt        # Real-time chat view
+│   │   ├── lock/
+│   │   │   └── LockScreen.kt        # Biometric lock UI
+│   │   ├── profilescreen/
+│   │   │   └── ProfileScreen.kt     # User profile & settings
+│   │   ├── profilesetup/
+│   │   │   └── UsernameSetupScreen.kt # Post-signup username
+│   │   └── requestscreen/
+│   │       └── RequestScreen.kt     # Incoming contact requests
+│   ├── state/
+│   │   └── AuthState.kt             # Auth UI state sealed class
+│   └── viewmodel/
+│       ├── AppLockViewModel.kt      # Lock state & auth toggle
+│       ├── AuthViewModel.kt         # Login / signup state
+│       ├── ChatViewModel.kt         # Messages, contacts, requests
+│       └── SettingsViewModel.kt     # App settings toggle
+│
+├── ui/
+│   └── theme/
+│       └── BackgroundWrapper.kt     # Dark/light background wrapper
+│
+├── utils/
+│   └── ProfileCircle.kt             # Reusable avatar composable
+│
+├── MainActivity.kt                   # Entry point (FragmentActivity)
+└── MyApp.kt                          # Hilt Application class```
+
+---
+
+##  Firebase Structure
+
+```
+com.loki.chatapp/
+│
+├── auth/
+│   └── DeviceAuthManager.kt          # Biometric & device credential auth
+│
+├── data/
+│   ├── local/
+│   │   ├── dao/
+│   │   │   └── SettingsDao.kt        # Room DAO for settings
+│   │   ├── database/
+│   │   │   └── AppDatabase.kt        # Room database definition
+│   │   └── entity/
+│   │       └── SettingsEntity.kt     # Settings table entity
+│   └── repository/
+│       ├── AuthRepositoryImp.kt      # Firebase Auth implementation
+│       ├── ChatRepository.kt         # Firestore chat & messages
+│       └── SettingsRepository.kt     # Local settings persistence
+│
+├── di/
+│   └── AppModule.kt                  # Hilt dependency injection module
+│
+├── domain/
+│   ├── model/
+│   │   ├── Message.kt                # Message data model
+│   │   └── User.kt                   # User data model
+│   ├── repository/
+│   │   └── AuthRepository.kt         # Auth repository interface
+│   └── usecase/
+│       ├── ListenMessagesUseCase.kt  # Listen to real-time messages
+│       ├── LoginUseCase.kt           # Login use case
+│       ├── SendMessageUseCase.kt     # Send message use case
+│       └── SignupUseCase.kt          # Signup use case
+│
+├── navigation/
+│   ├── AppNavigation.kt              # Root NavHost & lock gate
+│   ├── MainScreen.kt                 # Bottom nav scaffold
+│   └── Screen.kt                     # Sealed route definitions
+│
+├── presentation/
+│   ├── screen/
+│   │   ├── addcontact/
+│   │   │   └── AddContactScreen.kt  # Search & add contacts
+│   │   ├── authscreen/
+│   │   │   ├── AuthScreen.kt        # Login / Sign Up tabs
+│   │   │   └── WelcomeScreen.kt     # App entry welcome
+│   │   ├── chatscreen/
+│   │   │   ├── ChatListScreen.kt    # List of contacts/chats
+│   │   │   └── ChatScreen.kt        # Real-time chat view
+│   │   ├── lock/
+│   │   │   └── LockScreen.kt        # Biometric lock UI
+│   │   ├── profilescreen/
+│   │   │   └── ProfileScreen.kt     # User profile & settings
+│   │   ├── profilesetup/
+│   │   │   └── UsernameSetupScreen.kt # Post-signup username
+│   │   └── requestscreen/
+│   │       └── RequestScreen.kt     # Incoming contact requests
+│   ├── state/
+│   │   └── AuthState.kt             # Auth UI state sealed class
+│   └── viewmodel/
+│       ├── AppLockViewModel.kt      # Lock state & auth toggle
+│       ├── AuthViewModel.kt         # Login / signup state
+│       ├── ChatViewModel.kt         # Messages, contacts, requests
+│       └── SettingsViewModel.kt     # App settings toggle
+│
+├── ui/
+│   └── theme/
+│       └── BackgroundWrapper.kt     # Dark/light background wrapper
+│
+├── utils/
+│   └── ProfileCircle.kt             # Reusable avatar composable
+│
+├── MainActivity.kt                   # Entry point (FragmentActivity)
+└── MyApp.kt                          # Hilt Application class```
 
 ---
 
 ##  Tech Stack
 
-- Kotlin
-- Jetpack Compose
-- Firebase Authentication
-- Firebase Firestore
-- Room Database
-- Hilt
-- Coroutines
-- Flow / StateFlow
-- Biometric API
-- MVVM Architecture
+| Technology | Usage |
+|------------|-------|
+| Jetpack Compose | UI framework |
+| Firebase Auth | User authentication |
+| Cloud Firestore | Real-time database |
+| Hilt | Dependency injection |
+| Room | Local database |
+| Navigation Compose | In-app navigation |
+| BiometricPrompt | Biometric authentication |
+| Coil | Image loading |
+| Kotlin Coroutines | Async operations |
+| Kotlin Flow | Reactive state |
 
 ---
 
-##  App Flow
+##  Getting Started
 
-```text
-App Open
-   ↓
-Biometric Authentication
-   ↓
-Login / Signup
-   ↓
-Chat List Screen
-   ↓
-Real-Time Messaging
-```
+### Prerequisites
 
----
+- Android Studio Hedgehog or later
+- JDK 17
+- A Firebase project
 
-##  Screenshots
+### Setup
 
-> Add your screenshots here
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/chatapp.git
+   cd chatapp
+   ```
 
-```md
-![Login Screen](screenshots/login.png)
-![Chat Screen](screenshots/chat.png)
-![Biometric Screen](screenshots/biometric.png)
-```
+2. **Connect Firebase**
+   - Go to Firebase Console
+   - Create a new project and register your Android app
+   - Download `google-services.json` and place it in the `app/` directory
 
----
+3. **Enable Firebase services**
+   - Authentication → Email/Password
+   - Cloud Firestore → Start in test mode
 
-##  Project Structure
-
-```text
-com.loki.chatapp
-│
-├── data
-│   ├── local
-│   ├── remote
-│   └── repository
-│
-├── di
-│
-├── ui
-│   ├── auth
-│   ├── chat
-│   └── components
-│
-├── viewmodel
-│
-├── utils
-│
-└── MyApp.kt
-```
+4. **Build & Run**
+   ```bash
+   ./gradlew assembleDebug
+   ```
 
 ---
 
-##  Firebase Setup
+##  Requirements
 
-1. Go to Firebase Console
-2. Create a new project
-3. Enable:
-   - Authentication
-   - Firestore Database
-4. Download `google-services.json`
-5. Place it inside:
-
-```text
-app/google-services.json
-```
+- `minSdk`: 24 (Android 7.0)
+- `targetSdk`: 36
+- `compileSdk`: 36
+- Java: 17
 
 ---
 
-##  Installation
-
-### Clone Repository
-
-```bash
-git clone https://github.com/iamloki143/firebase-biometric-chat.git
-```
-
-### Open in Android Studio
-
-- Open the project
-- Sync Gradle
-- Connect Firebase
-- Run the app
-
 ---
 
-##  Dependencies
-
-```kotlin
-implementation("androidx.biometric:biometric:1.1.0")
-
-implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
-implementation("com.google.firebase:firebase-auth-ktx")
-implementation("com.google.firebase:firebase-firestore-ktx")
-
-implementation("com.google.dagger:hilt-android:2.57.1")
-ksp("com.google.dagger:hilt-compiler:2.57.1")
-```
-
----
-
-##  Learning Concepts Used
-
-- Firebase Real-Time Updates
-- Snapshot Listener
-- State Management
-- Dependency Injection
-- Secure Authentication
-- Offline Persistence
-- Clean Architecture
-- Reactive UI
-
----
-
-##  Future Improvements
-
--  Push Notifications
--  Media Sharing
--  Online/Offline Status
--  Typing Indicator
--  End-to-End Encryption
--  Group Chats
-
----
+<p align="center">Made with ❤️ using Jetpack Compose & Firebase</p>
