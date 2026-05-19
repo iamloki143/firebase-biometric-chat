@@ -11,9 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,37 +22,26 @@ import com.loki.chatapp.presentation.screen.chatscreen.ChatScreen
 import com.loki.chatapp.presentation.screen.lock.LockScreen
 import com.loki.chatapp.presentation.screen.profilesetup.UsernameSetupScreen
 import com.loki.chatapp.presentation.viewmodel.AppLockViewModel
+import com.loki.chatapp.presentation.viewmodel.SettingsViewModel
 
 @Composable
-fun AppNavigation() {
-
+fun AppNavigation(
+    activity: FragmentActivity,
+    settingsViewModel: SettingsViewModel,
+    lockViewModel: AppLockViewModel
+) {
     val navController = rememberNavController()
-    val context = LocalContext.current
-    val activity = context as? FragmentActivity
 
-    val lockViewModel: AppLockViewModel = hiltViewModel()
     val authEnabled by lockViewModel.authEnabled.collectAsState()
     val isUnlocked  by lockViewModel.isUnlocked.collectAsState()
 
     val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
 
     var showLogoutDialog by remember { mutableStateOf(false) }
-    if (authEnabled == null) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(color = Color.White)
-        }
-        return
-    }
-    val shouldShowLock = authEnabled == true && isLoggedIn && !isUnlocked
-
-    if (shouldShowLock && activity != null) {
+    val shouldShowLock = authEnabled && isLoggedIn && !isUnlocked
+    if (shouldShowLock) {
         LockScreen(
-            activity = activity,
+            activity   = activity,
             onUnlocked = { lockViewModel.onUnlocked() }
         )
         return
@@ -63,14 +50,14 @@ fun AppNavigation() {
     val startDestination = if (isLoggedIn) Screen.Main.route else Screen.Welcome.route
 
     NavHost(
-        navController = navController,
+        navController    = navController,
         startDestination = startDestination
     ) {
-
         composable(Screen.Main.route) {
             MainScreen(
+                onLogout          = { showLogoutDialog = true },
                 rootNavController = navController,
-                onLogout = { showLogoutDialog = true }
+                settingsViewModel = settingsViewModel
             )
         }
 
@@ -114,17 +101,18 @@ fun AppNavigation() {
             }
         }
     }
+
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            title = { Text("Logout") },
-            text = { Text("Are you sure you want to logout?") },
+            title   = { Text("Logout") },
+            text    = { Text("Are you sure you want to logout?") },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showLogoutDialog = false
                         FirebaseAuth.getInstance().signOut()
-                        lockViewModel.onLogout()  // re-arms lock for next session
+                        lockViewModel.onLogout()
                         navController.navigate(Screen.Auth.route) {
                             popUpTo(Screen.Main.route) { inclusive = true }
                         }

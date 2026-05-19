@@ -1,3 +1,63 @@
 <resources>
     <string name="app_name">ChatApp</string>
+
+    <!-- Auth -->
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="enter_confirm_password">Enter Confirm Password</string>
+
+    <!-- Chat -->
+    <string name="search_user">Search User</string>
+
+    <!-- Bottom Navigation -->
+    <string name="chat">Chat</string>
+    <string name="requests">Requests</string>
+    <string name="profile">Profile</string>
+
+    <!-- Lock -->
+    <string name="unlock_title">Authentication Required</string>
+    <string name="unlock_subtitle">Use your biometric or device PIN to unlock the app.</string>
+    <string name="unlock_action">Unlock</string>
+    <string name="secure_message">Secure access to your messages</string>
+    <string name="data_encryption">Your data is protected and encrypted</string>
+
+    <!-- Profile -->
+    <string name="logout">Logout</string>
+    <string name="user_device_auth">User Device Authentication</string>
+    <string name="user_dev_auth_summary">Required when opening the app</string>
+    <string name="safe_check">Your authentication data remains security managed by your device.</string>
+    <string name="dev_auth_enabled">Device Authentication Enabled</string>
+    <string name="enabled_summary">Your app is protected using your device security authentication</string>
+    <string name="dev_auth_disabled">Device Authentication Disabled</string>
+    <string name="disabled_summary">Turn on device authentication to prevent unauthorized access</string>
+
+    <!--Settings-->
+    <string name="settings">Settings</string>
+    <string name="language">Language</string>
+    <string name="theme">Theme</string>
+    
+    <!--Welcome Screen-->
+    <string name="welcome_title">Welcome to ChatApp</string>
+    <string name="welcome_subtitle">Your smart chat experience starts here</string>
+    <string name="welcome_action">Continue →></string>
+
+    <!-- Chat Screen -->
+    <string name="message">Message</string>
+
+
+    <!--Username characters-->
+    <string name="username_characters">Only letters, numbers, underscore</string>
+    <string name="min_5_char">Minimum 5 characters</string>
+    
+    <!--username setup -->
+    <string name="username_setup_title">Set Your Username</string>
+    <string name="username">Enter your Username</string>
+    <string name="next">Continue</string>
+
+    <!--Request Screen-->
+    <string name="accept">Accept</string>
+    <!--Device auth screen-->
+    <string name="user_dev_auth_screen">Authentication</string>
 </resources>

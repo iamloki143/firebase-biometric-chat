@@ -11,10 +11,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.loki.chatapp.presentation.viewmodel.ChatViewModel
 import com.loki.chatapp.utils.ProfileCircle
+import com.loki.chatapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,25 +31,24 @@ fun RequestScreen(
     }
 
     Scaffold(
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             Column {
                 TopAppBar(
-                    title = { Text("Requests", color = Color.White) },
+                    title = { Text(stringResource(id=R.string.requests), color = MaterialTheme.colorScheme.onSurface) },
                     navigationIcon = {
                         onBack?.let {
                             IconButton(onClick = { it() }) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = null, tint = Color.White)
+                                Icon(Icons.Default.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                             }
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        scrolledContainerColor = Color.Transparent
+                        containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
                 Divider(
-                    color = Color.White.copy(alpha = 0.2f),
+                    color = MaterialTheme.colorScheme.outline,
                     thickness = 1.dp
                 )
             }
@@ -75,7 +76,7 @@ fun RequestScreen(
                     ) {
                         ProfileCircle(user.name, user.profileImageUrl)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text(user.name, color = Color.White)
+                        Text(user.name, color = MaterialTheme.colorScheme.onSurface)
                     }
                     Spacer(modifier = Modifier.width(12.dp))
 
@@ -85,10 +86,10 @@ fun RequestScreen(
                             viewModel.loadContacts()
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xAA000000)
+                            containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
-                        Text("Accept", color = Color.White)
+                        Text(stringResource(id=R.string.accept), color = MaterialTheme.colorScheme.onPrimary)
                     }
                 }
             }

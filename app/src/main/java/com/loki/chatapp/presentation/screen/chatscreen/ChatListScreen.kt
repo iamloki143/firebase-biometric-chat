@@ -19,12 +19,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.loki.chatapp.presentation.viewmodel.ChatViewModel
 import com.loki.chatapp.utils.ProfileCircle
+import com.loki.chatapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,24 +48,23 @@ fun ChatListScreen(
     }
 
     Scaffold(
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             Column {
                 TopAppBar(
-                    title = { Text("ChatApp", color = Color.White) },
+                    title = { Text(stringResource(id=R.string.app_name),color = MaterialTheme.colorScheme.onSurface) },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        scrolledContainerColor = Color.Transparent
+                        containerColor = MaterialTheme.colorScheme.surface
                     ),
 
                     actions = {
                         IconButton(onClick = { onLogout() }) {
-                            Icon(Icons.Default.Logout, contentDescription = null, tint = Color.White)
+                            Icon(Icons.Default.Logout, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                 )
                 Divider(
-                    color = Color.White.copy(alpha = 0.2f),
+                    color = MaterialTheme.colorScheme.outline,
                     thickness = 1.dp
                 )
             }
@@ -72,9 +73,9 @@ fun ChatListScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onAddClick() },
-                containerColor = Color(0xAA000000)
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Text("+", color = Color.White, fontSize = 20.sp)
+                Text("+", color = MaterialTheme.colorScheme.onPrimary, fontSize = 20.sp)
             }
         }
     ) { padding ->
@@ -92,18 +93,18 @@ fun ChatListScreen(
             OutlinedTextField(
                 value = search,
                 onValueChange = { search = it },
-                placeholder = { Text("Search user", color = Color.White.copy(alpha = 0.6f)) },
+                placeholder = { Text(stringResource(id=R.string.search_user), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
                 shape = RoundedCornerShape(28.dp),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
-                    cursorColor = Color.White,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -121,7 +122,7 @@ fun ChatListScreen(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             ProfileCircle(user.name, user.profileImageUrl)
                             Spacer(modifier = Modifier.width(12.dp))
-                            Text(user.name, color = Color.White)
+                            Text(user.name, color = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                 }

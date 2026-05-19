@@ -20,6 +20,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Tab
@@ -40,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.loki.chatapp.presentation.state.AuthState
 import com.loki.chatapp.presentation.viewmodel.AuthViewModel
+import androidx.compose.ui.res.stringResource
+import com.loki.chatapp.R
 
 @Composable
 fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Boolean) -> Unit) {
@@ -53,29 +56,33 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
     }
     Column {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             contentAlignment = Alignment.Center
         ){
             Card(
-                modifier = Modifier.fillMaxWidth().padding(12.dp).border(1.dp,Color.White.copy(alpha = 0.2f),
-                    RoundedCornerShape(24.dp)),
+                modifier = Modifier.fillMaxWidth().padding(12.dp)
+                    .border(
+                        1.dp,
+                        MaterialTheme.colorScheme.outline,
+                        RoundedCornerShape(24.dp)
+                    ),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.White.copy(alpha = 0.1f)
+                    containerColor = MaterialTheme.colorScheme.surface
                 ),
                 elevation = CardDefaults.cardElevation(0.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
-                    TabRow(selectedTabIndex = selectedTab) {
+                    TabRow(selectedTabIndex = selectedTab,containerColor = MaterialTheme.colorScheme.surfaceVariant) {
                         Tab(
                             selected = selectedTab==0,
                             onClick = { selectedTab=0},
-                            text = {Text("Login")}
+                            text = {Text(stringResource(id = R.string.login))}
                         )
                         Tab(
                             selected = selectedTab ==1,
                             onClick = {selectedTab=1},
-                            text = {Text("Sign Up")}
+                            text = {Text(stringResource(id=R.string.signup))}
 
                         )
                     }
@@ -84,15 +91,19 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text("Enter EmailID", color = Color.LightGray) },
+                        label = { Text(stringResource(id=R.string.enter_email), color = Color.LightGray) },
                         modifier = Modifier.fillMaxWidth(),
-                        textStyle = LocalTextStyle.current.copy(color = Color.White),
+                        textStyle = LocalTextStyle.current.copy(
+                            color = MaterialTheme.colorScheme.onSurface
+                        ),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color.White,
-                            unfocusedBorderColor = Color.Gray,
-                            cursorColor = Color.White,
-                            focusedLabelColor = Color.White,
-                            unfocusedLabelColor = Color.Gray
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+
+                            cursorColor = MaterialTheme.colorScheme.primary,
+
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -100,7 +111,7 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text("Enter Password", color = Color.LightGray) },
+                        label = { Text(stringResource(id=R.string.enter_password), color = Color.LightGray) },
                         modifier = Modifier.fillMaxWidth(),
                         visualTransformation =
 
@@ -127,18 +138,20 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
 
                                     contentDescription = null,
 
-                                    tint = Color.White
+                                    tint = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         },
 
-                        textStyle = LocalTextStyle.current.copy(color = Color.White),
+                        textStyle = LocalTextStyle.current.copy(
+                            color = MaterialTheme.colorScheme.onSurface
+                        ),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color.White,
-                            unfocusedBorderColor = Color.Gray,
-                            cursorColor = Color.White,
-                            focusedLabelColor = Color.White,
-                            unfocusedLabelColor = Color.Gray
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            cursorColor = MaterialTheme.colorScheme.primary,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
                     if (selectedTab==1){
@@ -147,7 +160,7 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
                         OutlinedTextField(
                             value = confirmPassword,
                             onValueChange = { confirmPassword = it },
-                            label = { Text("Enter Confirm Password", color = Color.LightGray) },
+                            label = { Text(stringResource(id=R.string.enter_confirm_password), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                             modifier = Modifier.fillMaxWidth(),
                             visualTransformation =
 
@@ -174,17 +187,17 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
 
                                         contentDescription = null,
 
-                                        tint = Color.White
+                                        tint = MaterialTheme.colorScheme.onSurface
                                     )
                                 }
                             },
-                            textStyle = LocalTextStyle.current.copy(color = Color.White),
+                            textStyle = LocalTextStyle.current.copy(
+                                color = MaterialTheme.colorScheme.onSurface
+                            ),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Color.White,
-                                unfocusedBorderColor = Color.Gray,
-                                cursorColor = Color.White,
-                                focusedLabelColor = Color.White,
-                                unfocusedLabelColor = Color.Gray
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                cursorColor = MaterialTheme.colorScheme.primary
                             )
                         )
                     }
@@ -202,16 +215,16 @@ fun AuthScreen( viewModel: AuthViewModel = hiltViewModel(), onAuthSuccess: (Bool
                     },
                     modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White.copy(alpha = 0.2f),
-                            contentColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {
-                        Text(if (selectedTab==0)"Login" else "Sign Up")
+                        Text(if (selectedTab==0)stringResource(id=R.string.login) else stringResource(id=R.string.signup))
                     }
                     Spacer(modifier = Modifier.height(12.dp))
 
                     when(state){
-                        AuthState.Loading -> CircularProgressIndicator()
+                        AuthState.Loading -> CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                         AuthState.Success -> {
                             LaunchedEffect(Unit) {
                                 onAuthSuccess(selectedTab == 1)

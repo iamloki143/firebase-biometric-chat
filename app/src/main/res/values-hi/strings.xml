@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+
+    <!-- Auth -->
+    <string name="login">लॉगिन</string>
+    <string name="signup">साइन अप</string>
+    <string name="enter_email">ईमेल दर्ज करें</string>
+    <string name="enter_password">पासवर्ड दर्ज करें</string>
+    <string name="enter_confirm_password">पासवर्ड की पुष्टि करें</string>
+
+    <!-- Chat -->
+    <string name="search_user">उपयोगकर्ता खोजें</string>
+
+    <!-- Bottom Navigation -->
+    <string name="chat">चैट</string>
+    <string name="requests">अनुरोध</string>
+    <string name="profile">प्रोफ़ाइल</string>
+
+    <!-- Lock -->
+    <string name="unlock_title">प्रमाणीकरण आवश्यक</string>
+    <string name="unlock_subtitle">ऐप अनलॉक करने के लिए बायोमेट्रिक या डिवाइस PIN का उपयोग करें।</string>
+    <string name="unlock_action">अनलॉक करें</string>
+    <string name="secure_message">आपके संदेशों तक सुरक्षित पहुंच</string>
+    <string name="data_encryption">आपका डेटा सुरक्षित और एन्क्रिप्टेड है</string>
+
+    <!-- Profile -->
+    <string name="logout">लॉगआउट</string>
+    <string name="user_device_auth">डिवाइस प्रमाणीकरण</string>
+    <string name="user_dev_auth_summary">ऐप खोलते समय आवश्यक</string>
+    <string name="safe_check">आपका प्रमाणीकरण डेटा आपके डिवाइस द्वारा सुरक्षित रूप से प्रबंधित किया जाता है।</string>
+    <string name="dev_auth_enabled">डिवाइस प्रमाणीकरण सक्षम</string>
+    <string name="enabled_summary">आपका ऐप डिवाइस सुरक्षा से सुरक्षित है</string>
+    <string name="dev_auth_disabled">डिवाइस प्रमाणीकरण अक्षम</string>
+    <string name="disabled_summary">अनधिकृत पहुंच रोकने के लिए इसे चालू करें</string>
+
+    <!-- Settings -->
+    <string name="settings">सेटिंग्स</string>
+    <string name="language">भाषा</string>
+    <string name="theme">थीम</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_title">ChatApp में आपका स्वागत है</string>
+    <string name="welcome_subtitle">आपका स्मार्ट चैट अनुभव यहां से शुरू होता है</string>
+    <string name="welcome_action">जारी रखें →></string>
+
+    <!-- Chat Screen -->
+    <string name="message">संदेश</string>
+
+    <!-- Username characters -->
+    <string name="username_characters">केवल अक्षर, अंक, अंडरस्कोर</string>
+    <string name="min_5_char">कम से कम 5 अक्षर</string>
+
+    <!-- Username setup -->
+    <string name="username_setup_title">अपना उपयोगकर्ता नाम सेट करें</string>
+    <string name="username">अपना उपयोगकर्ता नाम दर्ज करें</string>
+    <string name="next">जारी रखें</string>
+
+    <!-- Request Screen -->
+    <string name="accept">स्वीकार करें</string>
+    <!--Device auth screen-->
+    <string name="user_dev_auth_screen">प्रमाणीकरण</string>
+</resources>

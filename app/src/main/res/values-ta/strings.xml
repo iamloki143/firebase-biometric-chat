@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+
+    <!-- Auth -->
+    <string name="login">உள்நுழை</string>
+    <string name="signup">பதிவு செய்</string>
+    <string name="enter_email">மின்னஞ்சலை உள்ளிடவும்</string>
+    <string name="enter_password">கடவுச்சொல்லை உள்ளிடவும்</string>
+    <string name="enter_confirm_password">கடவுச்சொல்லை உறுதிப்படுத்தவும்</string>
+
+    <!-- Chat -->
+    <string name="search_user">பயனரை தேடவும்</string>
+
+    <!-- Bottom Navigation -->
+    <string name="chat">அரட்டை</string>
+    <string name="requests">கோரிக்கைகள்</string>
+    <string name="profile">சுயவிவரம்</string>
+
+    <!-- Lock -->
+    <string name="unlock_title">அங்கீகாரம் தேவை</string>
+    <string name="unlock_subtitle">அப்பை திறக்க உங்கள் பயோமெட்ரிக் அல்லது PIN பயன்படுத்தவும்.</string>
+    <string name="unlock_action">திறக்க</string>
+    <string name="secure_message">உங்கள் செய்திகள் பாதுகாப்பாக உள்ளன</string>
+    <string name="data_encryption">உங்கள் தரவு பாதுகாப்பாக குறியாக்கப்பட்டுள்ளது</string>
+
+    <!-- Profile -->
+    <string name="logout">வெளியேறு</string>
+    <string name="user_device_auth">சாதன அங்கீகாரம்</string>
+    <string name="user_dev_auth_summary">அப்பை திறக்கும் போது தேவை</string>
+    <string name="safe_check">உங்கள் அங்கீகார தரவு உங்கள் சாதனத்தால் பாதுகாப்பாக நிர்வகிக்கப்படுகிறது.</string>
+    <string name="dev_auth_enabled">அங்கீகாரம் செயல்படுத்தப்பட்டுள்ளது</string>
+    <string name="enabled_summary">உங்கள் அப் சாதன பாதுகாப்பால் பாதுகாக்கப்படுகிறது</string>
+    <string name="dev_auth_disabled">அங்கீகாரம் முடக்கப்பட்டுள்ளது</string>
+    <string name="disabled_summary">அனுமதி இல்லாத அணுகலை தடுக்க இதை இயக்கவும்</string>
+
+    <!-- Settings -->
+    <string name="settings">அமைப்புகள்</string>
+    <string name="language">மொழி</string>
+    <string name="theme">தீம்</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_title">ChatApp-க்கு வரவேற்கிறோம்</string>
+    <string name="welcome_subtitle">உங்கள் ஸ்மார்ட் அரட்டை அனுபவம் இங்கிருந்து தொடங்குகிறது</string>
+    <string name="welcome_action">தொடரவும் →></string>
+
+    <!-- Chat Screen -->
+    <string name="message">செய்தி</string>
+
+    <!-- Username characters -->
+    <string name="username_characters">எழுத்துகள், எண்கள், underscore மட்டும்</string>
+    <string name="min_5_char">குறைந்தது 5 எழுத்துகள்</string>
+
+    <!-- Username setup -->
+    <string name="username_setup_title">உங்கள் பயனர் பெயரை அமைக்கவும்</string>
+    <string name="username">உங்கள் பயனர் பெயரை உள்ளிடவும்</string>
+    <string name="next">தொடரவும்</string>
+
+    <!-- Request Screen -->
+    <string name="accept">ஏற்கவும்</string>
+    <!--Device auth screen-->
+    <string name="user_dev_auth_screen">அங்கீகாரம்</string>
+</resources>

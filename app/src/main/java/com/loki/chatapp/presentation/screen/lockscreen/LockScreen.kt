@@ -9,7 +9,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -18,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,14 +47,19 @@ fun LockScreen(
     }
     val biometricIcon  = remember { DeviceAuthManager.biometricIcon(context) }
     val biometricLabel = remember { DeviceAuthManager.biometricLabel(context) }
+    var triggered by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
-        delay(400)
-        triggerAuth()
+        if (!triggered) {
+            triggered = true
+            delay(400)
+            triggerAuth()
+        }
     }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0D0D14))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Box(
             modifier = Modifier
@@ -58,11 +67,9 @@ fun LockScreen(
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFF242228),
-                            Color(0xFF2C2841),
-                            Color(0xFF372E5B),
-                            Color(0xFF453678),
-                            Color(0xFF59429A)
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                            MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
+                            MaterialTheme.colorScheme.background
                         )
                     )
                 )
@@ -115,7 +122,7 @@ fun LockScreen(
                         modifier = Modifier.size(96.dp),
                         shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color.White.copy(alpha = 0.1f)
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
                         ),
                         elevation = CardDefaults.cardElevation(0.dp)
                     ) {
@@ -137,14 +144,14 @@ fun LockScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "ChatApp",
-                        color = Color.White,
+                        text = stringResource(id=R.string.app_name),
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Secure access to your messages",
-                        color = Color.White.copy(alpha = 0.55f),
+                        text = stringResource(id=R.string.secure_message),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = 48.dp)
@@ -158,13 +165,13 @@ fun LockScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
                     .border(
-                        width = 1.dp,
-                        color = Color.White.copy(alpha = 0.12f),
-                        shape = RoundedCornerShape(28.dp)
+                        1.dp,
+                        MaterialTheme.colorScheme.outline,
+                        RoundedCornerShape(28.dp)
                     ),
                 shape = RoundedCornerShape(28.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.White.copy(alpha = 0.08f)
+                    containerColor = MaterialTheme.colorScheme.surface
                 ),
                 elevation = CardDefaults.cardElevation(0.dp)
             ) {
@@ -179,14 +186,14 @@ fun LockScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "Authentication Required",
-                            color = Color.White,
+                            text = stringResource(id=R.string.unlock_title),
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                         Text(
-                            text = "Use your biometric or device PIN to unlock the app.",
-                            color = Color.White.copy(alpha = 0.55f),
+                            text = stringResource(id=R.string.unlock_subtitle),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 13.sp,
                             textAlign = TextAlign.Center
                         )
@@ -199,7 +206,7 @@ fun LockScreen(
                             .height(52.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xAA000000)
+                            containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
                         Row(
@@ -213,7 +220,7 @@ fun LockScreen(
                             )
                             Text(
                                 text = "Unlock with $biometricLabel",
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
@@ -230,8 +237,8 @@ fun LockScreen(
                             modifier = Modifier.size(16.dp)
                         )
                         Text(
-                            text = "Your data is protected and encrypted",
-                            color = Color.White.copy(alpha = 0.45f),
+                            text = stringResource(id=R.string.data_encryption),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp
                         )
                     }

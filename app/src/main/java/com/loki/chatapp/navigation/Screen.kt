@@ -16,4 +16,7 @@ sealed class Screen(val route: String) {
     object ProfileImageSetup : Screen("profile_image_setup")
 
     object Lock: Screen("lock")
+    object Settings : Screen("settings")
+    object Language : Screen("language")
+    object DeviceAuth : Screen("device_auth")
 }

@@ -96,5 +96,7 @@ dependencies {
     //Biometric
     implementation("androidx.biometric:biometric:1.1.0")
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
+    //lottie
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
 
 }

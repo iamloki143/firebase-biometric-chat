@@ -1,5 +1,6 @@
 package com.loki.chatapp.presentation.screen.profilesetup
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -26,10 +28,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.loki.chatapp.R
 
 @Composable
 fun UsernameSetupScreen (
@@ -42,13 +46,14 @@ fun UsernameSetupScreen (
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp),
         contentAlignment = Alignment.Center
     ) {
 
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = Color.White.copy(alpha = 0.1f)
+                containerColor = MaterialTheme.colorScheme.surface
             ),
             shape = RoundedCornerShape(24.dp),
             modifier = Modifier.fillMaxWidth()
@@ -59,9 +64,9 @@ fun UsernameSetupScreen (
             ) {
 
                 Text(
-                    text = "Set Your Username",
+                    text = stringResource(id=R.string.username_setup_title),
                     style = MaterialTheme.typography.headlineSmall,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -70,22 +75,23 @@ fun UsernameSetupScreen (
                     value = name,
                     onValueChange = { name = it.filter { char -> char.isLetterOrDigit() ||char == '_'} },
                     placeholder = {
-                        Text("Enter your Username", color = Color.LightGray)
+                        Text(stringResource(id=R.string.username), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    textStyle = LocalTextStyle.current.copy(color = Color.White),
+                    textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.Gray,
-                        cursorColor = Color.White
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        cursorColor = MaterialTheme.colorScheme.primary
+
                     )
                 )
                 if (error.isNotEmpty()){
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = error,
-                        color = Color.Red
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
 
@@ -144,12 +150,16 @@ fun UsernameSetupScreen (
 
                     },
                     enabled = !loading,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+
                 ) {
                     if (loading) {
-                        CircularProgressIndicator(color = Color.White)
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
                     } else {
-                        Text("Continue")
+                        Text(stringResource(id=R.string.next))
                     }
                 }
             }

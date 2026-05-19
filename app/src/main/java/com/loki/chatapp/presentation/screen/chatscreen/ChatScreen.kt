@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.loki.chatapp.presentation.viewmodel.ChatViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
+import com.loki.chatapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,11 +67,12 @@ fun ChatScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
             .imePadding()
     ) {
         TopAppBar(
-            title = { Text(userName, color = Color.White) },
+            title = { Text(userName, color = MaterialTheme.colorScheme.onSurface) },
             navigationIcon = {
                 IconButton(onClick = {
                     if (!navigatingBack) {
@@ -80,15 +83,15 @@ fun ChatScreen(
                     }
 
                 }) {
-                    Icon(Icons.Default.ArrowBack, null, tint = Color.White)
+                    Icon(Icons.Default.ArrowBack, null, tint = MaterialTheme.colorScheme.onSurface)
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent
+                containerColor = MaterialTheme.colorScheme.surface
             )
         )
 
-        Divider(color = Color.White.copy(0.2f))
+        Divider(color = MaterialTheme.colorScheme.outline)
         LazyColumn(
             state = listState,
             modifier = Modifier
@@ -117,11 +120,12 @@ fun ChatScreen(
                     ) {
                         Text(
                             text = msg.text,
-                            color = Color.White,
+                            color = if (isMe) MaterialTheme.colorScheme.onPrimary
+                            else MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier
                                 .background(
-                                    if (isMe) Color(0xAA4CAF50)
-                                    else Color.White.copy(alpha = 0.2f),
+                                    if (isMe) MaterialTheme.colorScheme.primary
+                                    else MaterialTheme.colorScheme.surfaceVariant,
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .padding(12.dp)
@@ -130,7 +134,7 @@ fun ChatScreen(
                         if(formattedTime.isNotEmpty()){
                             Text(
                                 text = formattedTime,
-                                color = Color.White.copy(0.5f),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontSize = 11.sp,
                                 modifier = Modifier.padding(top = 4.dp)
                             )
@@ -140,13 +144,13 @@ fun ChatScreen(
                 Spacer(modifier = Modifier.height(6.dp))
             }
         }
-        Divider(color = Color.White.copy(0.2f))
+        Divider(color = MaterialTheme.colorScheme.outline)
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Black.copy(alpha = 0.3f))
-                .navigationBarsPadding() // handles bottom gesture bar
+                .background(MaterialTheme.colorScheme.surface)
+                .navigationBarsPadding()
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -157,14 +161,14 @@ fun ChatScreen(
                 shape = RoundedCornerShape(28.dp),
                 singleLine = true,
                 placeholder = {
-                    Text("Message", color = Color.White.copy(0.6f))
+                    Text(stringResource(id=R.string.message), color = MaterialTheme.colorScheme.onSurfaceVariant)
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White.copy(0.5f),
-                    cursorColor = Color.White,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -176,7 +180,7 @@ fun ChatScreen(
                     message = ""
                 }
             }) {
-                Icon(Icons.Default.Send, null, tint = Color.White)
+                Icon(Icons.Default.Send, null, tint = MaterialTheme.colorScheme.primary)
             }
         }
     }

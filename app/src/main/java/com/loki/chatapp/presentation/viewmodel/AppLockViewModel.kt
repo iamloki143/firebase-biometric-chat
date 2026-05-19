@@ -14,10 +14,11 @@ import javax.inject.Inject
 class AppLockViewModel @Inject constructor(
     private val repository: SettingsRepository
 ) : ViewModel() {
-    private val _authEnabled = MutableStateFlow<Boolean?>(null)
-    val authEnabled: StateFlow<Boolean?> = _authEnabled.asStateFlow()
+    private val _authEnabled = MutableStateFlow(false)
+    val authEnabled: StateFlow<Boolean> = _authEnabled
+
     private val _isUnlocked = MutableStateFlow(false)
-    val isUnlocked: StateFlow<Boolean> = _isUnlocked.asStateFlow()
+    val isUnlocked: StateFlow<Boolean> = _isUnlocked
 
     init {
         loadAuthEnabled()
