@@ -34,15 +34,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.FragmentActivity
 import com.loki.chatapp.R
 import com.loki.chatapp.presentation.viewmodel.SettingsViewModel
 import com.airbnb.lottie.compose.*
+import com.loki.chatapp.auth.DeviceAuthManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,10 +111,28 @@ fun DeviceAuthScreen(
                                     modifier = Modifier.padding(top = 6.dp)
                                 )
                             }
+                            val context = LocalContext.current
+                            val activity = context as FragmentActivity
+
                             Switch(
                                 checked = isEnabled,
-                                onCheckedChange = {settingsViewModel.onToggleChanged(it)},
-                                modifier = Modifier.padding(16.dp).padding(top = 20.dp)
+                                onCheckedChange = { newValue ->
+                                    DeviceAuthManager.authenticate(
+                                        activity = activity,
+                                        reason = if (newValue)
+                                            "Enable biometric lock"
+                                        else
+                                            "Disable biometric lock"
+                                    ) { success ->
+
+                                        if (success) {
+                                            settingsViewModel.onToggleChanged(newValue)
+                                        } else { }
+                                    }
+                                },
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .padding(top = 20.dp)
                             )
                         }
                         Divider(
