@@ -36,8 +36,6 @@ fun AppNavigation(
     val isUnlocked  by lockViewModel.isUnlocked.collectAsState()
 
     val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
-
-    var showLogoutDialog by remember { mutableStateOf(false) }
     val shouldShowLock = authEnabled && isLoggedIn && !isUnlocked
     if (shouldShowLock) {
         LockScreen(
@@ -55,7 +53,17 @@ fun AppNavigation(
     ) {
         composable(Screen.Main.route) {
             MainScreen(
-                onLogout          = { showLogoutDialog = true },
+                onLogout = {
+                    FirebaseAuth.getInstance().signOut()
+
+                    lockViewModel.onLogout()
+
+                    navController.navigate(Screen.Auth.route) {
+                        popUpTo(Screen.Main.route) {
+                            inclusive = true
+                        }
+                    }
+                },
                 rootNavController = navController,
                 settingsViewModel = settingsViewModel
             )
@@ -100,28 +108,5 @@ fun AppNavigation(
                 }
             }
         }
-    }
-
-    if (showLogoutDialog) {
-        AlertDialog(
-            onDismissRequest = { showLogoutDialog = false },
-            title   = { Text("Logout") },
-            text    = { Text("Are you sure you want to logout?") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showLogoutDialog = false
-                        FirebaseAuth.getInstance().signOut()
-                        lockViewModel.onLogout()
-                        navController.navigate(Screen.Auth.route) {
-                            popUpTo(Screen.Main.route) { inclusive = true }
-                        }
-                    }
-                ) { Text("Yes") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showLogoutDialog = false }) { Text("Cancel") }
-            }
-        )
     }
 }

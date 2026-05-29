@@ -56,12 +56,6 @@ fun ChatListScreen(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     ),
-
-                    actions = {
-                        IconButton(onClick = { onLogout() }) {
-                            Icon(Icons.Default.Logout, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-                        }
-                    }
                 )
                 Divider(
                     color = MaterialTheme.colorScheme.outline,

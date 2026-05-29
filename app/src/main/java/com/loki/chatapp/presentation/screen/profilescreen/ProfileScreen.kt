@@ -1,7 +1,10 @@
 package com.loki.chatapp.presentation.screen.profilescreen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +23,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -35,6 +39,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -68,6 +73,7 @@ import androidx.compose.ui.res.stringResource
 fun ProfileScreen(
     onLogout: () -> Unit,
     onSettingsClick: () -> Unit,
+    isNavigating: Boolean,
     onBack: (() -> Unit)? = null
 ) {
     val settingsViewModel: SettingsViewModel= hiltViewModel()
@@ -76,6 +82,9 @@ fun ProfileScreen(
     var editing by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember {
+        mutableStateOf(false)
+    }
 
     val isEnabled by settingsViewModel.authEnabled.collectAsState()
 
@@ -110,7 +119,12 @@ fun ProfileScreen(
                         }
                     },
                     actions = {
-                        IconButton(onClick = { onLogout() }) {
+                        IconButton(
+                            enabled = !isNavigating,
+                            onClick = {
+                                showLogoutDialog = true
+                            }
+                        ) {
                             Icon(Icons.Default.Logout, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                         }
                     },
@@ -126,7 +140,7 @@ fun ProfileScreen(
 
         }
     ) { padding ->
-
+        Box(modifier = Modifier.fillMaxSize()){
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -156,7 +170,7 @@ fun ProfileScreen(
                     }
                 },
 
-                enabled = editing,
+                enabled = editing && !isNavigating,
 
                 singleLine = true,
 
@@ -169,6 +183,7 @@ fun ProfileScreen(
                 trailingIcon = {
 
                     IconButton(
+                        enabled = !isNavigating,
 
                         onClick = {
 
@@ -289,7 +304,12 @@ fun ProfileScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onSettingsClick() }
+                    .clickable(
+                        enabled = !isNavigating
+                    ) {
+                        onSettingsClick()
+                        Log.e("NAV_TEST", "Settings Clicked")
+                    }
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -312,7 +332,12 @@ fun ProfileScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onLogout() }
+                    .clickable(
+                        enabled = !isNavigating
+                    ) {
+                        showLogoutDialog = true
+                        Log.e("NAV_TEST", "Logout Clicked")
+                    }
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -329,7 +354,58 @@ fun ProfileScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-
         }
+            if (isNavigating) {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            }
+                        ) {}
+                )
+            }
     }
+
+    if (showLogoutDialog) {
+
+        AlertDialog(
+            onDismissRequest = {
+                showLogoutDialog = false
+            },
+
+            title = {
+                Text("Logout")
+            },
+
+            text = {
+                Text("Are you sure you want to logout?")
+            },
+
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+                        onLogout()
+                    }
+                ) {
+                    Text("Yes")
+                }
+            },
+
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showLogoutDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+}
 }

@@ -17,6 +17,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +28,7 @@ import com.loki.chatapp.presentation.viewmodel.ChatViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.loki.chatapp.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,6 +55,9 @@ fun ChatScreen(
         viewModel.startListening(chatId)
     }
     var isFirstLoad by remember { mutableStateOf(true) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(messages.size) {
         if (messages.isNotEmpty()){
@@ -74,15 +80,19 @@ fun ChatScreen(
         TopAppBar(
             title = { Text(userName, color = MaterialTheme.colorScheme.onSurface) },
             navigationIcon = {
-                IconButton(onClick = {
-                    if (!navigatingBack) {
+                IconButton(
+                    onClick = {
 
-                        navigatingBack = true
+                        if (!navigatingBack) {
 
-                        onBack()
+                            navigatingBack = true
+
+                            focusManager.clearFocus(force = true)
+                            onBack()
+
+                        }
                     }
-
-                }) {
+                ) {
                     Icon(Icons.Default.ArrowBack, null, tint = MaterialTheme.colorScheme.onSurface)
                 }
             },
