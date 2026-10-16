@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.loki.chatapp.presentation.viewmodel.ChatViewModel
 import com.loki.chatapp.utils.ProfileCircle
 import com.loki.chatapp.R
+import com.loki.chatapp.utils.EmptyState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,9 +59,18 @@ fun RequestScreen(
 
 
         if (requests.isEmpty()) {
-            Text(text = "No friend requests",
-                modifier = Modifier.fillMaxWidth().padding(8.dp))
-            Text(text = "You're all caught up! New requests will appear here.", modifier = Modifier.fillMaxWidth().padding(8.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
+                EmptyState(
+                    title = "No friend requests",
+                    message = "You're all caught up! " +
+                            "New friend requests will appear here."
+                )
+            }
         } else {
             LazyColumn(
                 modifier = Modifier

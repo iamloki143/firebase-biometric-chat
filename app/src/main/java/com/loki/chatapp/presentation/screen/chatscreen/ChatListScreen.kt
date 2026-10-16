@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.loki.chatapp.presentation.viewmodel.ChatViewModel
 import com.loki.chatapp.utils.ProfileCircle
 import com.loki.chatapp.R
+import com.loki.chatapp.utils.EmptyState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,9 +103,18 @@ fun ChatListScreen(
                 )
             )
             if (filteredUsers.isEmpty()) {
-                Text(text = "No chats yet",
-                    modifier = Modifier.fillMaxWidth().padding(8.dp))
-                Text(text = "Find someone and send a message to get started by clicking the plus '+' button below", modifier = Modifier.fillMaxWidth().padding(8.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    EmptyState(
+                        title = "No chats yet",
+                        message = "Find someone using the + button below " +
+                                "and start your first conversation."
+                    )
+                }
             } else {
 
                 LazyColumn {
