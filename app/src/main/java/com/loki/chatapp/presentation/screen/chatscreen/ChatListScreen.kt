@@ -101,26 +101,36 @@ fun ChatListScreen(
                     unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                 )
             )
+            if (filteredUsers.isEmpty()) {
+                Text(text = "No chats yet",
+                    modifier = Modifier.fillMaxWidth().padding(8.dp))
+                Text(text = "Find someone and send a message to get started by clicking the plus '+' button below", modifier = Modifier.fillMaxWidth().padding(8.dp))
+            } else {
 
-            LazyColumn {
-                items(filteredUsers) { user ->
+                LazyColumn {
+                    items(filteredUsers) { user ->
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onUserClick(user.userId, user.name)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onUserClick(user.userId, user.name)
+                                }
+                                .padding(16.dp)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                ProfileCircle(user.name, user.profileImageUrl)
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(user.name, color = MaterialTheme.colorScheme.onSurface)
                             }
-                            .padding(16.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            ProfileCircle(user.name, user.profileImageUrl)
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(user.name, color = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                 }
+
             }
+
+
+
         }
     }
 }

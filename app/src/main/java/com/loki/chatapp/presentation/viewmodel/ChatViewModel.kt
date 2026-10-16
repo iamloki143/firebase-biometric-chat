@@ -29,15 +29,49 @@ class ChatViewModel @Inject constructor(
 
     var allUsers by mutableStateOf<List<User>>(emptyList())
         private set
-    fun loadAllUsers(){
-        val currentUserId= FirebaseAuth.getInstance().currentUser?.uid ?:return
+    fun loadAllUsers() {
+        android.util.Log.d("ChatUsers", "loadAllUsers() called")
+        val currentUserId =
+            FirebaseAuth.getInstance().currentUser?.uid
+
+        if (currentUserId == null) {
+            android.util.Log.e("ChatUsers", "No signed-in user")
+            return
+        }
+
         FirebaseFirestore.getInstance()
             .collection("users")
-            .addSnapshotListener { snapshots, _ ->
-                allUsers=snapshots?.documents
-                    ?.mapNotNull { it.toObject(User::class.java) }
-                    ?.filter { it.userId!=currentUserId }
-                    ?:emptyList()
+            .addSnapshotListener { snapshots, error ->
+
+                if (error != null) {
+                    android.util.Log.e(
+                        "ChatUsers",
+                        "Failed to load users",
+                        error
+                    )
+                    return@addSnapshotListener
+                }
+
+                if (snapshots == null) {
+                    android.util.Log.e(
+                        "ChatUsers",
+                        "Firestore returned no snapshot"
+                    )
+                    return@addSnapshotListener
+                }
+
+                val visibleUsers = snapshots.documents
+                    .mapNotNull { it.toObject(User::class.java) }
+                    .filter { it.userId != currentUserId }
+
+                allUsers = visibleUsers
+
+                android.util.Log.d(
+                    "ChatUsers",
+                    "Documents=${snapshots.documents.size}, " +
+                            "Visible users=${visibleUsers.size}, " +
+                            "Current UID=$currentUserId"
+                )
             }
     }
 

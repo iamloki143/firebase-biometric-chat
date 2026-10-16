@@ -56,43 +56,52 @@ fun RequestScreen(
         }
     ) { padding ->
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            items(requests) { user ->
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+        if (requests.isEmpty()) {
+            Text(text = "No friend requests",
+                modifier = Modifier.fillMaxWidth().padding(8.dp))
+            Text(text = "You're all caught up! New requests will appear here.", modifier = Modifier.fillMaxWidth().padding(8.dp))
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+            ) {
+                items(requests) { user ->
 
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        ProfileCircle(user.name, user.profileImageUrl)
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(user.name, color = MaterialTheme.colorScheme.onSurface)
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
 
-                    Button(
-                        onClick = {
-                            viewModel.acceptRequest(user.userId)
-                            viewModel.loadContacts()
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Text(stringResource(id=R.string.accept), color = MaterialTheme.colorScheme.onPrimary)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            ProfileCircle(user.name, user.profileImageUrl)
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(user.name, color = MaterialTheme.colorScheme.onSurface)
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Button(
+                            onClick = {
+                                viewModel.acceptRequest(user.userId)
+                                viewModel.loadContacts()
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary
+                            )
+                        ) {
+                            Text(stringResource(id=R.string.accept), color = MaterialTheme.colorScheme.onPrimary)
+                        }
                     }
                 }
             }
         }
+
+
     }
 }

@@ -49,9 +49,12 @@ fun AddContactScreen(
     viewModel: ChatViewModel= hiltViewModel(),
     onBack:() -> Unit
 ) {
+    android.util.Log.d("ChatUsers", "AddContactScreen composable entered")
     var search by remember { mutableStateOf("") }
     val users = viewModel.allUsers
     LaunchedEffect(Unit) {
+        android.util.Log.d("ChatUsers", "AddContactScreen opened")
+
         viewModel.loadAllUsers()
         viewModel.loadSentRequests()
         viewModel.loadContactIds()
